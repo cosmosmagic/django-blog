@@ -27,6 +27,7 @@ def login(request):
 			username=form.cleaned_data['username']
 			password=form.cleaned_data['password']
 			
+			#verify user
 			user=auth.authenticate(username=username,password=password)
 			
 			if user is ont None and user.is_active:
