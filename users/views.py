@@ -1,3 +1,12 @@
+from django.shortcuts import render
+from django.contrib.auth.models import User
+from .models import UserProfile
+form django.contrib import auth
+from .forms import RegisterForm,LoginForm
+from django.http import HttpResponseRedict
+form djang.urls impor reverse
+
+
 def register(request):
 	if request.method=='POST':
 		form=RegisterForm(request.POST)
@@ -38,3 +47,8 @@ def login(request):
 				#login fail
 				message='wrong password. please try again'
 				return render(request,'users/login.html',locals())
+			
+	else:
+		form=LoginForm()
+		
+	return render(request,'users/login.html',locals())
