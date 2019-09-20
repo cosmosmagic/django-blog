@@ -18,3 +18,22 @@ def register(request):
 	else:
 		form=RegisterForm()
 	return render(request,'users/register.html',locals())
+
+
+def login(request):
+	if request.method=request.POST:
+		form=LoginForm(request.POST)
+		if form.is_valid():
+			username=form.cleaned_data['username']
+			password=form.cleaned_data['password']
+			
+			user=auth.authenticate(username=username,password=password)
+			
+			if user is ont None and user.is_active:
+				auth.login(request,user)
+				return HttpResponseRedirect(reverse('users:profile'),args=[user.id])
+			
+			else:
+				#login fail
+				message='wrong password. please try again'
+				return render(request,'users/login.html',locals())
