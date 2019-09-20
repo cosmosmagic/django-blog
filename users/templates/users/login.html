@@ -1,4 +1,8 @@
 {% block content %}
+<h2>Login</h2>
+{% if message %}
+	{% message %}
+{% endif %}
 <div class='form-wrapper'>
 	<form method='post' action='' enctype='multipart/form-data'>
 		{% csrf_token %}
@@ -15,4 +19,7 @@
 		<input type='submit' value='Submit' />
 		</div>
 	</form>
-</div>
+	<a href='{% url 'uses:register'>Register</a>
+				       </div>
+				       {% endblock %}
+				       
