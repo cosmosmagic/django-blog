@@ -42,3 +42,22 @@ class RegisterForm(forms.Form):
             raise forms.ValidationError('please enter a valid emial')
             
         return email
+        
+    def clean_password1(self):
+        password1=self.cleaned_data.get('password1')
+        
+        if len(password1)<6:
+            raise forms.ValidationError('your password is too short')
+        elif len(password)>20:
+            raise forms.ValidationError('your password is too long')
+            
+        return password1
+    
+    def clean_password2(self):
+        password2=self.cleaned_data.get('password2')
+        password1=self.cleaned_data.get('password1')
+        
+        if password1 and password2 and password1!=password2:
+            raise forms.ValidationError('password mismatch. please enter again')
+            
+        return password2
