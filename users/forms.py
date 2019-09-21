@@ -81,4 +81,4 @@ class ProfileForm(forms.Form):
 	first_name=forms.CharField(lable='First Name',max_length=50,required=False)
 	last_name=forms.CharField(lable='Last Name',max_length=50,required=False)
 	org=forms.CharField(label='User',max_length=50,required=False)
-	telephone=forms.CharField(label='Telephone',max_length
+	telephone=forms.CharField(label='Telephone',max_length=50,required=False)
