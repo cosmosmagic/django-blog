@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'myblog',
     # 'pure_pagination',
     'comments',
+    'users',
 ]
 
 MIDDLEWARE = [
