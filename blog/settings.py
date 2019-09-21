@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'haystack',
     'myblog',
-    #'pure_pagination',
+    # 'pure_pagination',
     'comments',
 ]
 
@@ -56,7 +56,7 @@ ROOT_URLCONF = 'blog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -136,12 +136,12 @@ PAGINATION_SETTINGS = {
     'SHOW_FIRST_PAGE_WHEN_INVALID': True,
 }
 
-#HAYSTACK SETTINGS
-HAYSTACK_CONNECTIONS={
-    'default':{
-        'ENGINE':'myblog.whoosh_cn_backend.WhooshEngine',
-        'PATH':os.path.join(BASE_DIR,'whoosh_index'),
+# HAYSTACK SETTINGS
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'myblog.whoosh_cn_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
     }
 }
-HAYSTACK_SEARCH_RESULTS_PER_PAGE=10
-HAYSTACK_SIGANL_PROCESSOR='hystack.signals.RealtimeSignalProcessor'
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 10
+HAYSTACK_SIGANL_PROCESSOR = 'hystack.signals.RealtimeSignalProcessor'
