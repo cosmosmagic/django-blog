@@ -52,3 +52,21 @@ def login(request):
 		form=LoginForm()
 		
 	return render(request,'users/login.html',locals())
+
+
+#user information
+def profile(request,pk):
+	user=get_object_or_404(User,pk=pk)
+	return render(request,'users/profile.html',locals())
+
+
+#change user information
+def profile_updata(request,pk):
+	user=get_object_or_404(User,pk=pk)
+	user_profile=get_object_or_404(UserProfile,user=user)
+	
+	if request.method='POST':
+		form=ProfileForm(request.POST)
+		
+		if form.is_valid:
+			
