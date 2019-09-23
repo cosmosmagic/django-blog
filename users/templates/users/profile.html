@@ -1,0 +1,22 @@
+{% block content %}
+    <h2> Account info</h2>
+    <ul>
+        <li>Username:{{ user.username }}</li>
+        <li>email:{{ user.email }}</li>
+    </ul>
+    <h2>My Profile</h2>
+
+    <ul>
+        <li>first name: {{ user.firstname }}</li>
+        <li>last name: {{ user.lastname }}</li>
+        <li>origanization: {{ user.profile.org }}</li>
+        <li>telephone: {{ user.profile.telephone }}</li>
+    </ul>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'user:profile_update' user.id %}">Edit</a>
+        <a href="{% url 'user:pwd_change' user.id %}">Change Password</a>
+        <a href="{% url 'users:logout' %}">Logout</a>
+    {% endif %}
+
+{% endblock %}

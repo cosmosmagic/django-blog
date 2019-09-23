@@ -1,7 +1,7 @@
 {% block content %}
 <h2>Login</h2>
 {% if message %}
-	{% message %}
+	{{ message }}
 {% endif %}
 <div class='form-wrapper'>
 	<form method='post' action='' enctype='multipart/form-data'>
@@ -19,7 +19,7 @@
 		<input type='submit' value='Submit' />
 		</div>
 	</form>
-	<a href='{% url 'uses:register'}'>Register</a>
+	<a href='{% url 'users:register' %}'>Register</a>
 </div>
 {% endblock %}
 				       
