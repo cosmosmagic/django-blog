@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from .models import UserProfile
 from django.contrib import auth
@@ -15,50 +15,85 @@ def hash_code(s, salt='register'):
     return h.hexdigest()
 
 
+def index(request):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    return render(request, 'users/index.html')
+
+
 def register(request):
+    if request.session.get('is_login', None):
+        return redirect('/index/')
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password2']
-            hash_password = hash_code(password)
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            password1 = form.cleaned_data.get('password1')
+            password2 = form.cleaned_data.get('password2')
+            # hash_password = hash_code(password)
 
-            new_user = User()
-            new_user.username = username
-            new_user.email = email
-            new_user.password = password
-            new_user.save()
+            if password1 != password2:
+                message = 'two password is inconsistent!'
+                return render(request, 'users/register.html', locals())
+            else:
+                same_name_user = User.objects.filter(username=username)
+                if same_name_user:
+                    message = 'the username is exist!'
+                    return render(request, 'users/register.html', locals())
+                same_email_user = User.objects.filter(email=email)
+                if same_email_user:
+                    message = 'the email is exist!'
+                    return render(request, 'users/register.html', locals())
 
-            user_profile = UserProfile(user=new_user)
-            user_profile.save()
-
-        return HttpResponseRedirect(reverse('users:login'))
-    else:
-        form = RegisterForm()
-        return render(request, 'users/register.html', locals())
+                new_user = User.objects.create(
+                    username=username,
+                    password=password2,
+                    email=email
+                )
+                user_profile = UserProfile(user=new_user)
+                user_profile.save()
+                return render(request, 'users/login.html', locals())
+        else:
+            return render(request, 'users/register.html', locals())
+    form = RegisterForm()
+    return render(request, 'users/register.html', locals())
 
 
 def login(request):
+    if request.session.get('is_login', None):
+        return redirect('accounts/index/')
     if request.method == 'POST':
         form = LoginForm(request.POST)
 
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
 
-            user = auth.authenticate(username=username, password=password)
-
-            if user is not None and user.is_active:
-                auth.login(request, user)
-                return HttpResponseRedirect(reverse('users:profile'), args=[user.id])
-
+            try:
+                user = User.objects.get(username=username)
+            except:
+                message = "user doesn't exist!"
+                return render(request, 'users/login.html')
+            if user.password == password:
+                request.session['is_login'] = True
+                request.session['user_id'] = user.id
+                request.session['user_name'] = user.username
+                return redirect('accounts/index/')
             else:
-                message = 'wrong password. please try again'
+                message = 'password is incorrect'
                 return render(request, 'users/login.html', locals())
-    else:
-        form = LoginForm()
+        else:
+            return render(request, 'users/login.html', locals())
+    form = LoginForm()
     return render(request, 'users/login.html', locals())
+
+
+def logout(request):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    request.session.flush()
+    return redirect('/login/')
 
 
 # user information

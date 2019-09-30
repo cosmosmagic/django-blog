@@ -70,6 +70,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(label='密码', widget=forms.PasswordInput())
 
     # use clean method to define custom validation rules
+    '''
     def clean_username(self):
         username = self.cleaned_data.get('username')
         filter_result = User.objects.filter(username__exact=username)
@@ -77,6 +78,7 @@ class LoginForm(forms.Form):
             raise forms.ValidationError('the username does not exist, please register first.')
 
         return username
+    '''
 
 
 class ProfileForm(forms.Form):
