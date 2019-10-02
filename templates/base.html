@@ -30,6 +30,10 @@
 </head>
 
 <body>
+<h1>{{ request.session.user_name }}! Welcom back! </h1>
+<p>
+    <a href="{% url 'users:logout' %}">logout</a>
+</p>
 <div class="container">
     <header id="site-header">
         <div class="row">
@@ -176,3 +180,4 @@
 
 </body>
 </html>
+  
