@@ -14,16 +14,17 @@ def hash_code(s, salt='register'):
     h.update(s.encode())
     return h.hexdigest()
 
-
+'''
 def index(request):
     if not request.session.get('is_login', None):
         return redirect(reverse('users:index'))
     return render(request, 'users/index.html')
+'''
 
 
 def register(request):
     if request.session.get('is_login', None):
-        return redirect(reverse('users:index'))
+        return redirect(reverse('myblog:index'))
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -62,7 +63,7 @@ def register(request):
 
 def login(request):
     if request.session.get('is_login', None):
-        return redirect(reverse('users:index'))
+        return redirect(reverse('myblog:index'))
     if request.method == 'POST':
         form = LoginForm(request.POST)
 
@@ -79,7 +80,7 @@ def login(request):
                 request.session['is_login'] = True
                 request.session['user_id'] = user.id
                 request.session['user_name'] = user.username
-                return redirect(reverse('users:index'))
+                return redirect(reverse('myblog:index'))
             else:
                 message = 'password is incorrect'
                 return render(request, 'users/login.html', locals())
