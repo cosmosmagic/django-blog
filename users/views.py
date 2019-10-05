@@ -14,12 +14,11 @@ def hash_code(s, salt='register'):
     h.update(s.encode())
     return h.hexdigest()
 
-'''
+
 def index(request):
     if not request.session.get('is_login', None):
-        return redirect(reverse('users:index'))
-    return render(request, 'users/index.html')
-'''
+        return redirect(reverse('myblog:index'))
+    return render(request, 'myblog/index.html')
 
 
 def register(request):
@@ -66,7 +65,7 @@ def login(request):
         return redirect(reverse('myblog:index'))
     if request.method == 'POST':
         form = LoginForm(request.POST)
-
+        message = 'please check your content!'
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
@@ -75,7 +74,7 @@ def login(request):
                 user = User.objects.get(username=username)
             except:
                 message = "user doesn't exist!"
-                return render(request, 'users/login.html')
+                return render(request, 'users/login.html',locals())
             if user.password == password:
                 request.session['is_login'] = True
                 request.session['user_id'] = user.id
