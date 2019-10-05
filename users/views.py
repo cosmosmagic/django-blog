@@ -48,7 +48,7 @@ def register(request):
 
                 new_user = User.objects.create(
                     username=username,
-                    password=password2,
+                    password=hash_code(password2),
                     email=email
                 )
                 user_profile = UserProfile(user=new_user)
@@ -75,7 +75,7 @@ def login(request):
             except:
                 message = "user doesn't exist!"
                 return render(request, 'users/login.html',locals())
-            if user.password == password:
+            if user.password == hash_code(password):
                 request.session['is_login'] = True
                 request.session['user_id'] = user.id
                 request.session['user_name'] = user.username
