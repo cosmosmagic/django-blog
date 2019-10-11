@@ -122,7 +122,7 @@ def profile_update(request, pk):
             user_profile.org = form.cleaned_data['org']
             user_profile.telephone = form.cleaned_data['telephone']
             user_profile.save()
-            return HttpResponseRedirect(reverse('users:profile'), args=[user.id])
+            return redirect(reverse('users:profile',args=[user.id]))
     else:
         default_data = {
             'first_name': user.first_name,
@@ -132,4 +132,4 @@ def profile_update(request, pk):
         }
         form = ProfileForm(default_data)
 
-    return render(request, 'users:profile_update.html', locals())
+    return render(request, 'users/profile_update.html', locals())
