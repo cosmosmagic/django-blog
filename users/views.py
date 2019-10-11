@@ -14,12 +14,6 @@ def hash_code(s, salt='register'):
     return h.hexdigest()
 
 
-def index(request):
-    if not request.session.get('is_login', None):
-        return redirect(reverse('users:login'))
-    return redirect(reverse('myblog:index'))
-
-
 def register(request):
     if request.session.get('is_login', None):
         return redirect(reverse('myblog:index'))
@@ -122,7 +116,7 @@ def profile_update(request, pk):
             user_profile.org = form.cleaned_data['org']
             user_profile.telephone = form.cleaned_data['telephone']
             user_profile.save()
-            return redirect(reverse('users:profile',args=[user.id]))
+            return redirect(reverse('users:profile', args=[user.id]))
     else:
         default_data = {
             'first_name': user.first_name,
