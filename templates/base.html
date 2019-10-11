@@ -32,6 +32,7 @@
 <body>
 <h1>{{ request.session.user_name }}! Welcom back! </h1>
 <p>
+    <a href="{% url 'users:profile' pk=request.session.user_id %}">profile</a>
     <a href="{% url 'users:logout' %}">logout</a>
 </p>
 <div class="container">

@@ -1,9 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from .models import UserProfile
-from django.contrib import auth
 from .forms import RegisterForm, LoginForm, ProfileForm
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 import hashlib
 
@@ -17,8 +16,8 @@ def hash_code(s, salt='register'):
 
 def index(request):
     if not request.session.get('is_login', None):
-        return redirect(reverse('myblog:index'))
-    return render(request, 'myblog/index.html')
+        return redirect(reverse('users:login'))
+    return redirect(reverse('myblog:index'))
 
 
 def register(request):
@@ -53,9 +52,13 @@ def register(request):
                 )
                 user_profile = UserProfile(user=new_user)
                 user_profile.save()
+
+                message = 'register success!'
+                form = LoginForm()
                 return render(request, 'users/login.html', locals())
+                # return redirect(reverse('users:login'))
         else:
-            return render(request, 'users/register.html', locals())
+            return render(request, 'users/register.html')
     form = RegisterForm()
     return render(request, 'users/register.html', locals())
 
@@ -74,7 +77,7 @@ def login(request):
                 user = User.objects.get(username=username)
             except:
                 message = "user doesn't exist!"
-                return render(request, 'users/login.html',locals())
+                return render(request, 'users/login.html', locals())
             if user.password == hash_code(password):
                 request.session['is_login'] = True
                 request.session['user_id'] = user.id
@@ -98,12 +101,16 @@ def logout(request):
 
 # user information
 def profile(request, pk):
+    if not request.session.get('is_login', None):
+        return redirect(reverse('users:login'))
     user = get_object_or_404(User, pk=pk)
     return render(request, 'users/profile.html', locals())
 
 
 # change user information
 def profile_update(request, pk):
+    if not request.session.get('is_login', None):
+        return redirect(reverse('users:login'))
     user = get_object_or_404(User, pk=pk)
     user_profile = get_object_or_404(UserProfile, user=user)
     if request.method == 'POST':

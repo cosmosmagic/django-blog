@@ -2,11 +2,11 @@ from django import forms
 from django.contrib.auth.models import User
 import re
 
-
+'''
 def check_email(email):
     pattern = re.compile(r'\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?')
     return re.match(pattern, email)
-
+'''
 
 class RegisterForm(forms.Form):
     username = forms.CharField(label='用户名', max_length=50, widget=forms.TextInput())
