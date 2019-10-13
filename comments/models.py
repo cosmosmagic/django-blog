@@ -9,9 +9,11 @@ class Comment(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
 
     blog = models.ForeignKey('myblog.Blog', on_delete=models.CASCADE)
+    user = models.ForeignKey('users.UserProfile', on_delete=models.CASCADE, default='')
 
     def __str__(self):
-        return self.text[:20]
+        return self.user.username + self.text[:20]
+
     class Meta:
-        verbose_name='评论'
-        verbose_name_plural=verbose_name
+        verbose_name = '评论'
+        verbose_name_plural = verbose_name
