@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from myblog.models import Blog
-
+from users.contrib.auth.models import User
 from .models import Comment
 from .forms import CommentForm
 
@@ -20,12 +20,14 @@ def blog_comment(request, blog_id):
 
         # 当调用 form.is_valid() 方法时，Django 自动帮我们检查表单的数据是否符合格式要求。
         if form.is_valid():
+            user=get_object_or_404(User,id=request.session.user_id)
             # 检查到数据是合法的，调用表单的 save 方法保存数据到数据库，
             # commit=False 的作用是仅仅利用表单的数据生成 Comment 模型类的实例，但还不保存评论数据到数据库。
             comment = form.save(commit=False)
 
-            # 将评论和被评论的文章关联起来。
+            # 将评论和被评论的文章评论人关联起来。
             comment.blog = blog
+            comment.user=user
 
             # 最终将评论数据保存进数据库，调用模型实例的 save 方法
             comment.save()
