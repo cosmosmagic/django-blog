@@ -129,6 +129,13 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
+MEDIA_URL='/media/'
+
+MEDIA_ROOT=[
+    os.path.join(BASE_DIR,"media"),
+]
+    
+
 # PAGINATIONS SETTINGS
 PAGINATION_SETTINGS = {
     'PAGE_RANGE_DISPLAYED': 3,  # 中间显示的页数
