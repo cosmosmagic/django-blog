@@ -13,6 +13,13 @@
         <li>telephone: {{ user.profile.telephone }}</li>
     </ul>
 
+{% if user.profile.avatar %}
+    <div class="col-md-4">头像</div>
+    <img src="{{ profile.avatar.url }}" style="max-width: 20%; border-radius: 15%;" class="col-md-4">
+{% else %}
+    <h5 class="col-md-4">暂无头像</h5>
+{% endif %}
+
     {% if user.is_authenticated %}
         <a href="{% url 'users:profile_update' user.id %}">Edit</a>
         <a href="{% url 'users:logout' %}">Logout</a>
