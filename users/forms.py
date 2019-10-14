@@ -86,3 +86,4 @@ class ProfileForm(forms.Form):
     last_name = forms.CharField(label='Last Name', max_length=50, required=False)
     org = forms.CharField(label='Org', max_length=50, required=False)
     telephone = forms.CharField(label='Telephone', max_length=50, required=False)
+    avatar=form.ImageField(label='avatar',required=False)
