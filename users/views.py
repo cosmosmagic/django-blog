@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from .models import UserProfile
 from .forms import RegisterForm, LoginForm, ProfileForm
 from django.http import HttpResponseRedirect
@@ -108,13 +109,18 @@ def profile_update(request, pk):
     user = get_object_or_404(User, pk=pk)
     user_profile = get_object_or_404(UserProfile, user=user)
     if request.method == 'POST':
-        form = ProfileForm(request.POST)
+        if request.user!=user:
+            return HttpResponse("you don't have permission to modified user's information")
+        form = ProfileForm(request.POST,request.FILES)
         if form.is_valid():
             user.first_name = form.cleaned_data['first_name']
             user.last_name = form.cleaned_data['last_name']
             user.save()
             user_profile.org = form.cleaned_data['org']
             user_profile.telephone = form.cleaned_data['telephone']
+            
+            if 'avatar' in request.FILES:
+                user_profile.avatar=form.cleaned_data['avatar']
             user_profile.save()
             return redirect(reverse('users:profile', args=[user.id]))
     else:
