@@ -41,7 +41,7 @@ def register(request):
 
                 new_user = User.objects.create(
                     username=username,
-                    password=hash_code(password2),
+                    password=password2,
                     email=email
                 )
                 user_profile = UserProfile(user=new_user)
@@ -90,7 +90,7 @@ def logout(request):
     if not request.session.get('is_login', None):
         return redirect(reverse('users:login'))
     request.session.flush()
-    return redirect(reverse('users:login'))
+    return redirect(reverse('myblog:index'))
 
 
 # user information
