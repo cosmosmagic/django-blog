@@ -8,6 +8,7 @@ def check_email(email):
     return re.match(pattern, email)
 '''
 
+
 class RegisterForm(forms.Form):
     username = forms.CharField(label='用户名', max_length=50, widget=forms.TextInput())
     email = forms.EmailField(label='邮箱')
@@ -86,4 +87,4 @@ class ProfileForm(forms.Form):
     last_name = forms.CharField(label='Last Name', max_length=50, required=False)
     org = forms.CharField(label='Org', max_length=50, required=False)
     telephone = forms.CharField(label='Telephone', max_length=50, required=False)
-    avatar=form.ImageField(label='avatar',required=False)
+    avatar = forms.ImageField(label='avatar', required=False)
