@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block main %}
+    <!-- 已有代码，文章正文 -->
     <article class="post post-{{ blog.id }}">
         <header class="entry-header">
             <h1 class="entry-title">{{ blog.title }}</h1>
@@ -26,7 +27,9 @@
             </div>
         </div>
     </article>
+    <!-- 发表评论 -->
     <section class="comment-area">
+        {% if user.is_authenticated %}
         <hr>
         <h3>发表评论</h3>
         <form action="{% url 'comments:blog_comment' blog.id %}" method="post" class="comment-form">
@@ -55,7 +58,15 @@
                 </div>
             </div>    <!-- row -->
         </form>
-
+        {% else %}
+        <br>
+        <h5 class="row justify-content-center">
+            请<a href="{% url 'users:login' %}">登录</a>后回复
+        </h5>
+        <br>
+        {% endif %}
+        
+        <!-- 显示评论 -->
         <div class="comment-list-panel">
             <h3>评论列表，共 <span>{{ blog.comment_set.count }}</span> 条评论</h3>
             <ul class="comment-list list-unstyled">
