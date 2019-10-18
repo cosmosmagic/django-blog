@@ -73,7 +73,7 @@ def login(request):
             except:
                 message = "user doesn't exist!"
                 return render(request, 'users/login.html', locals())
-            if user.password == hash_code(password):
+            if user.password == password:
                 request.session['is_login'] = True
                 request.session['user_id'] = user.id
                 request.session['user_name'] = user.username
@@ -108,19 +108,18 @@ def profile_update(request, pk):
         return redirect(reverse('users:login'))
     user = get_object_or_404(User, pk=pk)
     user_profile = get_object_or_404(UserProfile, user=user)
+
     if request.method == 'POST':
-        if request.user!=user:
-            return HttpResponse("you don't have permission to modified user's information")
-        form = ProfileForm(request.POST,request.FILES)
+        form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
             user.first_name = form.cleaned_data['first_name']
             user.last_name = form.cleaned_data['last_name']
             user.save()
             user_profile.org = form.cleaned_data['org']
             user_profile.telephone = form.cleaned_data['telephone']
-            
+
             if 'avatar' in request.FILES:
-                user_profile.avatar=form.cleaned_data['avatar']
+                user_profile.avatar = form.cleaned_data['avatar']
             user_profile.save()
             return redirect(reverse('users:profile', args=[user.id]))
     else:
