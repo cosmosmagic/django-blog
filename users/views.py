@@ -1,18 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from .models import UserProfile
 from .forms import RegisterForm, LoginForm, ProfileForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-import hashlib
-
-
-def hash_code(s, salt='register'):
-    h = hashlib.sha256()
-    s += salt
-    h.update(s.encode())
-    return h.hexdigest()
 
 
 def register(request):
@@ -58,7 +51,7 @@ def register(request):
     return render(request, 'users/register.html', locals())
 
 
-def login(request):
+def user_login(request):
     if request.session.get('is_login', None):
         return redirect(reverse('myblog:index'))
     if request.method == 'POST':
@@ -67,21 +60,16 @@ def login(request):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-
-            try:
-                user = User.objects.get(username=username)
-            except:
-                message = "user doesn't exist!"
-                return render(request, 'users/login.html', locals())
-            if user.password == password:
-                request.session['is_login'] = True
-                request.session['user_id'] = user.id
-                request.session['user_name'] = user.username
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
                 return redirect(reverse('myblog:index'))
             else:
-                message = 'password is incorrect'
+                message = "user or password is incorrect!"
                 return render(request, 'users/login.html', locals())
+
         else:
+            message = "user or password is illegal!"
             return render(request, 'users/login.html', locals())
     form = LoginForm()
     return render(request, 'users/login.html', locals())
