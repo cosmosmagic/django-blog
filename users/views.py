@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from .models import UserProfile
 from .forms import RegisterForm, LoginForm, ProfileForm
@@ -8,9 +8,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 
-def register(request):
-    if request.session.get('is_login', None):
-        return redirect(reverse('myblog:index'))
+def user_register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -33,11 +31,12 @@ def register(request):
                     message = 'the email is exist!'
                     return render(request, 'users/register.html', locals())
 
-                new_user = User.objects.create(
+                new_user = User(
                     username=username,
-                    password=password2,
                     email=email
                 )
+                new_user.set_password(password2)
+                new_user.save()
                 user_profile = UserProfile(user=new_user)
                 user_profile.save()
 
@@ -52,8 +51,6 @@ def register(request):
 
 
 def user_login(request):
-    if request.session.get('is_login', None):
-        return redirect(reverse('myblog:index'))
     if request.method == 'POST':
         form = LoginForm(request.POST)
         message = 'please check your content!'
@@ -75,25 +72,19 @@ def user_login(request):
     return render(request, 'users/login.html', locals())
 
 
-def logout(request):
-    if not request.session.get('is_login', None):
-        return redirect(reverse('users:login'))
-    request.session.flush()
+def user_logout(request):
+    logout(request)
     return redirect(reverse('myblog:index'))
 
 
 # user information
-def profile(request, pk):
-    if not request.session.get('is_login', None):
-        return redirect(reverse('users:login'))
+def user_profile(request, pk):
     user = get_object_or_404(User, pk=pk)
     return render(request, 'users/profile.html', locals())
 
 
 # change user information
 def profile_update(request, pk):
-    if not request.session.get('is_login', None):
-        return redirect(reverse('users:login'))
     user = get_object_or_404(User, pk=pk)
     user_profile = get_object_or_404(UserProfile, user=user)
 

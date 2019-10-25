@@ -29,10 +29,10 @@
     <script src="{% static '/js/modernizr.custom.js' %}"></script>
 </head>
 <body>
-{% if request.session.is_login %}
-    <h1>{{ request.session.user_name }}! Welcom back! </h1>
+{% if user.is_authenticated %}
+    <h1>{{ user.username }}! Welcom back! </h1>
     <p>
-        <a href="{% url 'users:profile' pk=request.session.user_id %}">profile</a>
+        <a href="{% url 'users:profile' pk=user.id %}">profile</a>
         <a href="{% url 'users:logout' %}">logout</a>
     </p>
 {% else %}
