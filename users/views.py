@@ -86,7 +86,7 @@ def user_profile(request, pk):
 # change user information
 def profile_update(request, pk):
     user = get_object_or_404(User, pk=pk)
-    user_profile = get_object_or_404(UserProfile, user=user)
+    user_profile = UserProfile.objects.get_or_create(user=user)
 
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES)
