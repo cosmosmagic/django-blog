@@ -86,9 +86,11 @@ def user_profile(request, pk):
 # change user information
 def profile_update(request, pk):
     user = get_object_or_404(User, pk=pk)
-    user_profile = UserProfile.objects.get_or_create(user=user)
+    user_profile = UserProfile.objects.get(user_id=pk)
 
     if request.method == 'POST':
+        if request.user != user:
+            return HttpResponse("你没有权限修改此用户信息。")
         form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
             user.first_name = form.cleaned_data['first_name']
