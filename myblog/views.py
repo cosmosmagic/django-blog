@@ -4,6 +4,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from .models import Blog, Category, Tag
 # from pure_pagination import PageNotAnInteger, Paginator
+from django.core.paginator import Paginator
 import markdown
 from comments.forms import CommentForm
 from django.utils.text import slugify
@@ -11,6 +12,21 @@ from markdown.extensions.toc import TocExtension
 from django.db.models import Q
 
 
+def blog_list(request):
+    # 修改变量名称（articles -> article_list）
+    blog_list = Blog.objects.all()
+
+    # 每页显示 1 篇文章
+    paginator = Paginator(blog_list, 1)
+    # 获取 url 中的页码
+    page = request.GET.get('page')
+    # 将导航对象相应的页码内容返回给 articles
+    blog_list = paginator.get_page(page)
+
+    context = { 'blog_list': blog_list }
+    return render(request, 'article/list.html', context)
+
+'''    
 class IndexView(ListView):
     """
     首页
@@ -82,6 +98,7 @@ class IndexView(ListView):
         }
 
         return data
+'''
 
 
 class ArchiveView(ListView):
