@@ -8,7 +8,7 @@ class UserProfile(models.Model):
     org = models.CharField('用户名', max_length=128, blank=True)
     telephone = models.CharField('电话', max_length=50, blank=True)
     mod_date = models.DateTimeField('更新日期', auto_now=True)
-    avatar=models.ImageField('头像',upload_to='avatar/%Y%m%d/', blank=True,null=True)
+    avatar = models.ImageField('头像', upload_to='avatar/%Y%m%d/', blank=True, null=True)
 
     def __str__(self):
         return self.user
