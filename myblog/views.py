@@ -83,14 +83,6 @@ class IndexView(ListView):
 
         return data
 
-    # 分页
-    # try:
-    #    page = request.GET.get('page', 1)
-    # except PageNotAnInteger:
-    # page = 1
-    # p = Paginator(blog_list, 5, request=request)  # per_page为每页博客数
-    # all_blog = p.page(page)
-
 
 class ArchiveView(ListView):
     model = Blog
