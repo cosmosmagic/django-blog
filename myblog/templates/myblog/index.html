@@ -30,38 +30,43 @@
         <div class="no-post">暂时还没有发布文章！</div>
     {% endfor %}
 
-    <!-- 简单分页效果
-    <div class="pagination-simple">
-        <a href="#">上一页</a>
-        <span class="current">第 6 页 / 共 11 页</span>
-        <a href="#">下一页</a>
+    <!-- 页码导航 -->
+<div class="pagination row">
+    <div class="m-auto">
+        <span class="step-links">
+            <!-- 如果不是第一页，则显示上翻按钮 -->
+            {% if blog_list.has_previous %}
+                <a href="?page=1" class="btn btn-success">
+                    &laquo; 1
+                </a>
+                <span>...</span>
+                <a href="?page={{ blog_list.previous_page_number }}" 
+                   class="btn btn-secondary"
+                >
+                    {{ blog_list.previous_page_number }}
+                </a>
+            {% endif %}
+
+            <!-- 当前页面 -->
+            <span class="current btn btn-danger btn-lg">
+                {{ blog_list.number }}
+            </span>
+
+            <!-- 如果不是最末页，则显示下翻按钮 -->
+            {% if articles.has_next %}
+                <a href="?page={{ blog_list.next_page_number }}"
+                   class="btn btn-secondary"
+                >
+                    {{ blog_list.next_page_number }}
+                </a>
+                <span>...</span>
+                <a href="?page={{ blog_list.paginator.num_pages }}"
+                   class="btn btn-success"
+                >
+                    {{ blog_list.paginator.num_pages }} &raquo;
+                </a>
+            {% endif %}
+        </span>
     </div>
-    -->
-    {% if is_paginated %}
-        <div class="pagination">
-            {% if first %}
-                <a href="?page=1">1</a>
-            {% endif %}
-            {% if left %}
-                {% if left_has_more %}
-                    <span>...</span>
-                {% endif %}
-                {% for i in left %}
-                    <a href="?page={{ i }}">{{ i }}</a>
-                {% endfor %}
-            {% endif %}
-            <a href="?page={{ page_obj.number }}" style="color: red">{{ page_obj.number }}</a>
-            {% if right %}
-                {% for i in right %}
-                    <a href="?page={{ i }}">{{ i }}</a>
-                {% endfor %}
-                {% if right_has_more %}
-                    <span>...</span>
-                {% endif %}
-            {% endif %}
-            {% if last %}
-                <a href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
-            {% endif %}
-        </div>
-    {% endif %}
+</div>
 {% endblock main %}
