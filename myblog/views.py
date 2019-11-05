@@ -13,18 +13,26 @@ from django.db.models import Q
 
 
 def blog_list(request):
-    # 修改变量名称（articles -> article_list）
-    blog_list = Blog.objects.all()
+    # 根据GET请求中查询条件
+    # 返回不同排序的对象数组
+    if request.GET.get('order') == 'views':
+        blog_list = Blog.objects.all().order_by('-views')
+        order = 'views'
+    else:
+        # 修改变量名称（articles -> article_list）
+        blog_list = Blog.objects.all()
+        order = 'normal'
 
     # 每页显示 1 篇文章
-    paginator = Paginator(blog_list, 1)
+    paginator = Paginator(blog_list, 2)
     # 获取 url 中的页码
     page = request.GET.get('page')
     # 将导航对象相应的页码内容返回给 articles
     blog_list = paginator.get_page(page)
 
-    context = { 'blog_list': blog_list }
-    return render(request, 'article/list.html', context)
+    context = {'blog_list': blog_list, 'order': order}
+    return render(request, 'myblog/index.html', context)
+
 
 '''    
 class IndexView(ListView):

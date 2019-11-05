@@ -1,5 +1,20 @@
 {% extends 'base.html' %}
 {% block main %}
+    <!-- 面包屑导航 -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'myblog:index' %}">
+                    最新
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'myblog:index' %}?order=views">
+                    最热
+                </a>
+            </li>
+        </ol>
+    </nav>
     {% if error_msg %}
         <p>{{ error_msg }}</p>
     {% endif %}
@@ -31,8 +46,8 @@
     {% endfor %}
 
     <!-- 页码导航 -->
-<div class="pagination row">
-    <div class="m-auto">
+    <div class="pagination row">
+        <div class="m-auto">
         <span class="step-links">
             <!-- 如果不是第一页，则显示上翻按钮 -->
             {% if blog_list.has_previous %}
@@ -40,7 +55,7 @@
                     &laquo; 1
                 </a>
                 <span>...</span>
-                <a href="?page={{ blog_list.previous_page_number }}" 
+                <a href="?page={{ blog_list.previous_page_number }}"
                    class="btn btn-secondary"
                 >
                     {{ blog_list.previous_page_number }}
@@ -53,7 +68,7 @@
             </span>
 
             <!-- 如果不是最末页，则显示下翻按钮 -->
-            {% if articles.has_next %}
+            {% if blog_list.has_next %}
                 <a href="?page={{ blog_list.next_page_number }}"
                    class="btn btn-secondary"
                 >
@@ -67,6 +82,6 @@
                 </a>
             {% endif %}
         </span>
+        </div>
     </div>
-</div>
 {% endblock main %}
