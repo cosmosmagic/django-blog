@@ -51,6 +51,8 @@ class Blog(models.Model):
     excerpt = models.CharField(verbose_name='文章摘要', max_length=200, blank=True, default='No Value')
     author = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     views = models.PositiveIntegerField(verbose_name='阅读量', default=0)
+    avatar=models.ImageField(upload_to='article/%Y%m%d',blank=True,null=True)
+    
 
     class Meta:
         ordering = ['-create_time', 'title']
